@@ -5,6 +5,8 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const path = require("path");
 
+const routes = require("./app/routes");
+
 const app = express();
 
 /**
@@ -23,6 +25,6 @@ app.use(
   express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
 );
 
-app.use(require("./routes"));
+app.use(routes);
 
-app.listen(process.env.APP_PORT ?? 3333);
+app.listen(process.env.APP_PORT || 3333);
