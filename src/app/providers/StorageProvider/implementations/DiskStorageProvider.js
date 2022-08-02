@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const UploadConfig = require("../../../../config/upload");
+const fs = require('fs');
+const path = require('path');
+const UploadConfig = require('../../../../config/upload');
 
 class DiskStorageProvider {
   async saveFile(fileName) {
@@ -22,6 +22,13 @@ class DiskStorageProvider {
     }
 
     await fs.promises.unlink(filePath);
+  }
+
+  async fileExists(fileName) {
+    if (fileName === null) {
+      return false;
+    }
+    return fs.existsSync(`${UploadConfig.uploadsFolder}/${fileName}`);
   }
 }
 
