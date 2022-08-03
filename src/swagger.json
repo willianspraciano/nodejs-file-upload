@@ -1,0 +1,167 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de upload de arquivos",
+    "description": "Essa API tem como objetivo a implementação de alguns providers de upload de arquivos.",
+    "contact": {
+      "email": "willian.s.praciano@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "API de teste"
+    }
+  ],
+  "paths": {
+    "/posts": {
+      "post": {
+        "summary": "Cadastro de Postagem",
+        "descrição": "Essa rota será responsável por cadastrar um novo Post",
+        "tags": ["Posts"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/PostResponseOK"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/PostResponseBAD"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Posts"],
+        "summary": "Lista todos os posts",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/PostResponseOK"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "delete": {
+        "tags": ["Posts"],
+        "summary": "Delete um Post",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do Post a ser deletado",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": "Post não encontrado"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Post": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "required": true
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PostResponseOK": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        },
+        "key": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "_id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "__v": {
+          "type": "number"
+        }
+      },
+      "example": {
+        "name": "name.png",
+        "size": 391254,
+        "key": "4bbb8fbfa69d3a209f68-name.png",
+        "url": "http://localhost:3333/files/4bbb8fbfa69d3a209f68-name.png",
+        "_id": "62ea81bd4f09472bbcf003c0",
+        "createdAt": "2022-08-03T14:10:05.127Z",
+        "__v": 0
+      }
+    },
+    "PostResponseBAD": {
+      "type": "object",
+      "example": {
+        "error": "Nenhum arquivo enviado"
+      }
+    }
+  }
+}

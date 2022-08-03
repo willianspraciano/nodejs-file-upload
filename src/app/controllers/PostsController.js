@@ -1,9 +1,12 @@
-const Post = require("../models/Post");
-const StorageProvider = require("../providers/StorageProvider");
+const Post = require('../models/Post');
+const StorageProvider = require('../providers/StorageProvider');
 
 class PostsController {
   async create(req, res) {
-    const { originalname: name, size, key, location: url = "" } = req.file;
+    if (!req.file)
+      return res.status(400).json({ error: 'Nenhum arquivo enviado' });
+
+    const { originalname: name, size, key, location: url = '' } = req.file;
 
     const storageProvider = new StorageProvider();
 
@@ -30,6 +33,8 @@ class PostsController {
     const storageProvider = new StorageProvider();
 
     const post = await Post.findById(id);
+
+    if (!post) return res.status(400).json({ error: 'Post não encontrado' });
 
     const fileName = post.key;
 
